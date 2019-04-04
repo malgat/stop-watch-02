@@ -15,7 +15,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var pauseButton: UIBarButtonItem!
     @IBOutlet weak var resetButton: UIBarButtonItem!
     
-    var time = 0
+    var time = 00
+    var sec = 00
+    var min = 00
     var myTimer = Timer()
     
     override func viewDidLoad() {
@@ -29,7 +31,7 @@ class ViewController: UIViewController {
             return;
         }
         
-        myTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo:nil, repeats: true) //1초마다 호출하는 타이머.
+        myTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(updateTime), userInfo:nil, repeats: true) //1초마다 호출하는 타이머.
         
         
         ChangeButtonState(start:false, pause:true, stop:true)
@@ -42,7 +44,7 @@ class ViewController: UIViewController {
     
     @IBAction func resetBtnPressed(_ sender: Any) {
         myTimer.invalidate()
-        time = 0
+        time = 00
         timeLabel.text = String(time)
         
         ChangeButtonState(start:true, pause:false, stop:false)
@@ -50,7 +52,11 @@ class ViewController: UIViewController {
     
     @objc func updateTime(){
         time += 1
-        timeLabel.text = String(time)
+        
+        let min = time/6000
+        let sec = time/100 - (min*60)
+        let ssec = time % 100
+        timeLabel.text = String(format : "%02d:%02d:%02d", min, sec, ssec)
     }
     func ChangeButtonState(start : Bool, pause : Bool, stop : Bool){
         startButton.isEnabled = start
